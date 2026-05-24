@@ -63,51 +63,157 @@ const Landing = () => {
 
       {/* Hero Section */}
       <section className="relative flex-1 flex flex-col items-center justify-center overflow-hidden px-6">
-        {/* Glassmorphic blob */}
+        {/* Liquid glass blob */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <div className="relative w-[700px] h-[550px] animate-float">
-            {/* Main blob shape */}
+          {/* SVG filter for liquid distortion */}
+          <svg className="absolute w-0 h-0">
+            <defs>
+              <filter id="liquid-warp">
+                <feTurbulence
+                  type="fractalNoise"
+                  baseFrequency="0.012"
+                  numOctaves="4"
+                  seed="3"
+                  result="noise"
+                />
+                <feDisplacementMap
+                  in="SourceGraphic"
+                  in2="noise"
+                  scale="35"
+                  xChannelSelector="R"
+                  yChannelSelector="G"
+                />
+              </filter>
+              <filter id="soft-glow">
+                <feGaussianBlur stdDeviation="2" result="blur" />
+                <feMerge>
+                  <feMergeNode in="blur" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+            </defs>
+          </svg>
+
+          <div
+            className="relative w-[750px] h-[580px] animate-float"
+            style={{ filter: "url(#liquid-warp)" }}
+          >
+            {/* Colored background wash */}
+            <div
+              className="absolute inset-[-30px]"
+              style={{
+                background:
+                  "radial-gradient(ellipse at 45% 40%, rgba(91,78,216,0.18) 0%, rgba(147,130,255,0.12) 35%, rgba(200,195,255,0.06) 65%, transparent 100%)",
+                borderRadius: "60% 40% 55% 45% / 50% 55% 45% 50%",
+                filter: "blur(40px)",
+              }}
+            />
+
+            {/* Main glass body */}
             <div
               className="absolute inset-0"
               style={{
                 background:
-                  "linear-gradient(135deg, rgba(91,78,216,0.08) 0%, rgba(147,130,255,0.12) 25%, rgba(196,190,255,0.15) 50%, rgba(219,215,255,0.1) 75%, rgba(91,78,216,0.06) 100%)",
-                borderRadius: "60% 40% 55% 45% / 55% 60% 40% 45%",
-                backdropFilter: "blur(2px)",
-                border: "1px solid rgba(255,255,255,0.5)",
+                  "linear-gradient(145deg, rgba(215,210,255,0.55) 0%, rgba(200,195,255,0.35) 25%, rgba(185,180,255,0.25) 50%, rgba(210,205,255,0.4) 75%, rgba(225,220,255,0.5) 100%)",
+                borderRadius: "62% 38% 53% 47% / 48% 58% 42% 52%",
+                backdropFilter: "blur(20px)",
+                WebkitBackdropFilter: "blur(20px)",
+                border: "2px solid rgba(255,255,255,0.7)",
                 boxShadow:
-                  "inset 0 0 80px rgba(255,255,255,0.3), inset 0 0 20px rgba(91,78,216,0.05), 0 20px 60px rgba(91,78,216,0.06)",
+                  "inset 0 4px 40px rgba(255,255,255,0.6), inset 0 -8px 30px rgba(91,78,216,0.06), 0 8px 40px rgba(91,78,216,0.1), 0 30px 80px rgba(91,78,216,0.06)",
               }}
             />
-            {/* Glass highlight layer */}
+
+            {/* Top-left glass highlight / light refraction */}
             <div
               className="absolute inset-0"
               style={{
                 background:
-                  "linear-gradient(160deg, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0.1) 40%, transparent 60%)",
-                borderRadius: "60% 40% 55% 45% / 55% 60% 40% 45%",
+                  "linear-gradient(150deg, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0.4) 18%, rgba(255,255,255,0.08) 40%, transparent 55%)",
+                borderRadius: "62% 38% 53% 47% / 48% 58% 42% 52%",
               }}
             />
-            {/* Secondary smaller blob for depth */}
+
+            {/* Inner caustic light streak */}
             <div
-              className="absolute -top-8 -right-12 w-[65%] h-[55%]"
+              className="absolute top-[12%] left-[8%] w-[60%] h-[28%]"
               style={{
                 background:
-                  "linear-gradient(120deg, rgba(91,78,216,0.06) 0%, rgba(165,155,255,0.1) 50%, rgba(200,195,255,0.08) 100%)",
-                borderRadius: "45% 55% 50% 50% / 50% 45% 55% 50%",
-                border: "1px solid rgba(255,255,255,0.3)",
-                boxShadow: "inset 0 0 40px rgba(255,255,255,0.2)",
+                  "linear-gradient(125deg, rgba(255,255,255,0.65) 0%, rgba(255,255,255,0.2) 35%, transparent 65%)",
+                borderRadius: "50% 50% 45% 55% / 60% 40% 60% 40%",
+                filter: "blur(10px)",
               }}
             />
-            {/* Bottom accent blob */}
+
+            {/* Secondary caustic near center */}
             <div
-              className="absolute -bottom-6 -left-8 w-[50%] h-[45%]"
+              className="absolute top-[40%] left-[25%] w-[50%] h-[15%]"
               style={{
                 background:
-                  "linear-gradient(200deg, rgba(91,78,216,0.05) 0%, rgba(180,170,255,0.1) 60%, rgba(220,215,255,0.07) 100%)",
-                borderRadius: "50% 50% 40% 60% / 55% 45% 55% 45%",
-                border: "1px solid rgba(255,255,255,0.25)",
-                boxShadow: "inset 0 0 30px rgba(255,255,255,0.15)",
+                  "linear-gradient(100deg, transparent 0%, rgba(255,255,255,0.3) 30%, rgba(255,255,255,0.15) 60%, transparent 90%)",
+                borderRadius: "50%",
+                filter: "blur(12px)",
+              }}
+            />
+
+            {/* Upper-right glass lobe */}
+            <div
+              className="absolute -top-6 right-[-35px] w-[58%] h-[50%]"
+              style={{
+                background:
+                  "linear-gradient(130deg, rgba(215,210,255,0.45) 0%, rgba(195,190,255,0.25) 50%, rgba(225,220,255,0.35) 100%)",
+                borderRadius: "48% 52% 55% 45% / 52% 48% 52% 48%",
+                backdropFilter: "blur(16px)",
+                WebkitBackdropFilter: "blur(16px)",
+                border: "1.5px solid rgba(255,255,255,0.55)",
+                boxShadow:
+                  "inset 0 3px 25px rgba(255,255,255,0.45), 0 6px 24px rgba(91,78,216,0.06)",
+              }}
+            />
+
+            {/* Highlight on upper-right lobe */}
+            <div
+              className="absolute -top-6 right-[-35px] w-[58%] h-[50%]"
+              style={{
+                background:
+                  "linear-gradient(140deg, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0.15) 25%, transparent 50%)",
+                borderRadius: "48% 52% 55% 45% / 52% 48% 52% 48%",
+              }}
+            />
+
+            {/* Bottom-left glass lobe */}
+            <div
+              className="absolute bottom-[-18px] left-[-25px] w-[50%] h-[44%]"
+              style={{
+                background:
+                  "linear-gradient(210deg, rgba(205,200,255,0.4) 0%, rgba(180,175,255,0.2) 50%, rgba(220,215,255,0.3) 100%)",
+                borderRadius: "52% 48% 45% 55% / 48% 52% 48% 52%",
+                backdropFilter: "blur(14px)",
+                WebkitBackdropFilter: "blur(14px)",
+                border: "1.5px solid rgba(255,255,255,0.45)",
+                boxShadow:
+                  "inset 0 2px 20px rgba(255,255,255,0.4), 0 4px 18px rgba(91,78,216,0.04)",
+              }}
+            />
+
+            {/* Right edge refraction line */}
+            <div
+              className="absolute top-[25%] right-[3%] w-[12%] h-[45%]"
+              style={{
+                background:
+                  "linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.35) 30%, rgba(255,255,255,0.1) 70%, transparent 100%)",
+                borderRadius: "50%",
+                filter: "blur(8px)",
+              }}
+            />
+
+            {/* Bottom edge shadow for depth */}
+            <div
+              className="absolute bottom-[-5%] left-[10%] w-[80%] h-[15%]"
+              style={{
+                background:
+                  "radial-gradient(ellipse, rgba(91,78,216,0.08) 0%, transparent 70%)",
+                filter: "blur(20px)",
               }}
             />
           </div>
