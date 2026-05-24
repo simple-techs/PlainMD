@@ -548,16 +548,16 @@ async def upload_document(
         "conversation_id": conversation_id,
         "user_id": user["user_id"],
         "role": "assistant",
-        "content": json.dumps({
+        "content": {
             "type": "document_summary",
             "summary": ai_result.get("summary", ""),
             "category": ai_result.get("category", "uncategorized"),
             "record_type": ai_result.get("record_type", ""),
             "key_findings": ai_result.get("key_findings", []),
-        }),
-        "citations": json.dumps([
+        },
+        "citations": [
             {"document_id": document_id, "filename": filename}
-        ]),
+        ],
         "created_at": _now().isoformat(),
     }).execute()
 

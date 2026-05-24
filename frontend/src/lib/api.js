@@ -11,7 +11,6 @@ export const clearToken = () => localStorage.removeItem(TOKEN_KEY);
 
 export const api = axios.create({
   baseURL: API,
-  withCredentials: true,
 });
 
 api.interceptors.request.use((cfg) => {

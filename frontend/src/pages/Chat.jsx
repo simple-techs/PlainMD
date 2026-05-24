@@ -26,7 +26,7 @@ const Chat = () => {
         const msgs = (data.messages || []).map((m) => ({
           id: m.message_id,
           role: m.role,
-          content: typeof m.content === "string" ? m.content : formatDocSummary(m.content),
+          content: formatDocSummary(m.content),
         }));
         setMessages(msgs);
         setCurrentConvId(conversationId);
