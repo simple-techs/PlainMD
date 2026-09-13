@@ -1,5 +1,8 @@
 -- Supabase / PostgreSQL schema for PlainMD
--- Run this in the Supabase SQL Editor (https://supabase.com/dashboard -> SQL Editor)
+-- Lives in the `plainmd` schema of the shared "Simple Tech MVPs" project (SUPABASE_SCHEMA env var).
+-- Run in the Supabase SQL Editor with:  set search_path = plainmd;
+-- The backend uses the service_role key; anon/authenticated have no grants on this schema,
+-- so RLS stays enabled with no policies.
 
 -- ========================================
 -- Users
@@ -94,9 +97,3 @@ ALTER TABLE user_sessions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE documents ENABLE ROW LEVEL SECURITY;
 ALTER TABLE conversations ENABLE ROW LEVEL SECURITY;
 ALTER TABLE messages ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY "Service role full access" ON users FOR ALL USING (true) WITH CHECK (true);
-CREATE POLICY "Service role full access" ON user_sessions FOR ALL USING (true) WITH CHECK (true);
-CREATE POLICY "Service role full access" ON documents FOR ALL USING (true) WITH CHECK (true);
-CREATE POLICY "Service role full access" ON conversations FOR ALL USING (true) WITH CHECK (true);
-CREATE POLICY "Service role full access" ON messages FOR ALL USING (true) WITH CHECK (true);
