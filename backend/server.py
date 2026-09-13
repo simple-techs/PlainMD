@@ -33,6 +33,7 @@ from fastapi import (
 from pydantic import BaseModel, EmailStr, Field
 from starlette.middleware.cors import CORSMiddleware
 from supabase import create_client, Client
+from supabase.lib.client_options import SyncClientOptions
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / ".env")
@@ -42,13 +43,15 @@ load_dotenv(ROOT_DIR / ".env")
 # --------------------------------------------------------------------- #
 SUPABASE_URL = os.environ["SUPABASE_URL"]
 SUPABASE_KEY = os.environ["SUPABASE_KEY"]
+# PlainMD lives in its own schema inside the shared "Simple Tech MVPs" project.
+SUPABASE_SCHEMA = os.environ.get("SUPABASE_SCHEMA", "plainmd")
 JWT_SECRET = os.environ["JWT_SECRET"]
 GROQ_API_KEY = os.environ["GROQ_API_KEY"]
 GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID", "")
 GOOGLE_CLIENT_SECRET = os.environ.get("GOOGLE_CLIENT_SECRET", "")
 SAMBANOVA_API_KEY = os.environ.get("SAMBANOVA_API_KEY", "")
 
-sb: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+sb: Client = create_client(SUPABASE_URL, SUPABASE_KEY, options=SyncClientOptions(schema=SUPABASE_SCHEMA))
 groq_client = AsyncGroq(api_key=GROQ_API_KEY)
 
 JWT_ALG = "HS256"

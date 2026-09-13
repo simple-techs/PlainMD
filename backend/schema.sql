@@ -1,5 +1,13 @@
 -- Supabase / PostgreSQL schema for PlainMD
--- Run this in the Supabase SQL Editor (https://supabase.com/dashboard -> SQL Editor)
+-- Lives in the `plainmd` schema of the shared "Simple Tech MVPs" project (SUPABASE_SCHEMA env var).
+-- Run the whole file in the Supabase SQL Editor (creates the schema and grants).
+-- The backend uses the service_role key; anon/authenticated have no grants on this schema,
+-- so RLS stays enabled with no policies.
+
+create schema if not exists plainmd;
+set search_path = plainmd;
+grant usage on schema plainmd to service_role;
+revoke all on schema plainmd from anon, authenticated;
 
 -- ========================================
 -- Users
@@ -95,8 +103,9 @@ ALTER TABLE documents ENABLE ROW LEVEL SECURITY;
 ALTER TABLE conversations ENABLE ROW LEVEL SECURITY;
 ALTER TABLE messages ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY "Service role full access" ON users FOR ALL USING (true) WITH CHECK (true);
-CREATE POLICY "Service role full access" ON user_sessions FOR ALL USING (true) WITH CHECK (true);
-CREATE POLICY "Service role full access" ON documents FOR ALL USING (true) WITH CHECK (true);
-CREATE POLICY "Service role full access" ON conversations FOR ALL USING (true) WITH CHECK (true);
-CREATE POLICY "Service role full access" ON messages FOR ALL USING (true) WITH CHECK (true);
+grant all on all tables in schema plainmd to service_role;
+grant all on all sequences in schema plainmd to service_role;
+grant all on all routines in schema plainmd to service_role;
+alter default privileges in schema plainmd grant all on tables to service_role;
+alter default privileges in schema plainmd grant all on sequences to service_role;
+-- PostgREST must expose the schema: Dashboard > Settings > API > Exposed schemas, add plainmd.
